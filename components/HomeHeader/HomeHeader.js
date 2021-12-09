@@ -21,7 +21,7 @@ const HomeHeader = (props) => {
     return (
       <View
         style={{
-          // backgroundColor: 'red',
+          backgroundColor: 'red',
           flexDirection: "row",
           justifyContent: "space-between",
           width:'98%',

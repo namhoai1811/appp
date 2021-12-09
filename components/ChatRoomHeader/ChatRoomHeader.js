@@ -24,7 +24,7 @@ const ChatRoomHeader = (props) => {
         flexDirection: "row",
         justifyContent: "space-between",
         // flex: 1,
-        // backgroundColor: 'red',
+        // backgroundColor: 'blue',
         // marginLeft: 25,
         width:'90%',
         padding: 10,

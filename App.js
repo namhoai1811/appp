@@ -5,6 +5,7 @@ import HomeChatScreen from './screens/HomeChatScreen';
 import ChatRommScreen from './screens/ChatRommScreen';
 // import StackNavigation from './navigation/StackNavigation';
 
+
 import AppNavi from './navi/AppNavi';
 export default function App() {
   return (

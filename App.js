@@ -1,18 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, Button } from 'react-native';
+
 import HomeChatScreen from './screens/HomeChatScreen';
 import ChatRommScreen from './screens/ChatRommScreen';
-// import StackNavigation from './navigation/StackNavigation';
+import ChatNavigation from './navi/ChatNavigation';
 
-
-import AppNavi from './navi/AppNavi';
 export default function App() {
   return (
   // <ChatRommScreen/>
   // <HomeChatScreen/>
   // <StackNavigation/>
-    <AppNavi/>
+    // <AppNavi/>
+    <ChatNavigation/>
 
   );
 }

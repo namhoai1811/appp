@@ -9,7 +9,7 @@ import ChatRoomHeader from '../components/ChatRoomHeader/ChatRoomHeader';
 
 const Stack = createNativeStackNavigator();
 
-export default function AppNavi() {
+export default function ChatNavigation() {
     return (
         <NavigationContainer>
             <Stack.Navigator>

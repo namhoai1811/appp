@@ -12,12 +12,11 @@ export default function ChatRoomItem({ chatRoom }) {
     const _onPress = () => {
         navigation.navigate('ChatRom', { id: chatRoom.id});
         // alert('id' + user.name);
-
     }
+
     return (
         <Pressable style={styles.container}
             onPress={_onPress}
-        
         >
             <Image source={{uri: user.imageUri}} style={styles.image}></Image>
             
@@ -32,6 +31,7 @@ export default function ChatRoomItem({ chatRoom }) {
                 </View>
                 <Text numberOfLines={1}  style={styles.text}>{chatRoom.lastMessage.content} </Text>
             </View>    
+            
         </Pressable>
         
     );

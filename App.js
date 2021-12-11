@@ -8,8 +8,7 @@ import ChatNavigation from './navi/ChatNavigation';
 
 export default function App() {
   return (
-  // <ChatRommScreen/>
-  // <HomeChatScreen/>
+
   // <StackNavigation/>
     // <AppNavi/>
     <ChatNavigation/>

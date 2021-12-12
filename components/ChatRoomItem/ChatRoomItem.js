@@ -2,16 +2,38 @@ import React from 'react';
 import { Image, Text, View , Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import styles from './styles';
-
+// import GetToken from '../../api/GetToken';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import apiClient from '../../api/Client';
 
 export default function ChatRoomItem({ chatRoom }) {
     
     const user = chatRoom.users[1];
     const navigation = useNavigation()
+    // const GetToken =  AsyncStorage.getItem('userToken');
+
+    // const getAll = async () => {
+    //     try {
+    //       const response =  await apiClient.get('users/show/60c45284ae8c0f00220f462b');
+    //       console.log("ga", response.data.data);
+    //     } catch(e){
+    //       console.log(e.message)
+    //     }
+    //   }
+    const getAll = async () => {
+        try {
+          const response =  await apiClient.get('chats/getListChats');
+          console.log("ga", response.data.data);
+        } catch(e){
+          console.log(e.message)
+        }
+      }
 
     const _onPress = () => {
-        navigation.navigate('ChatRom', { id: chatRoom.id});
-        // alert('id' + user.name);
+        // navigation.navigate('ChatRom', { id: chatRoom.id});
+        // // alert('id' + user.name);
+        // // console.log(GetToken._W);
+        getAll();
     }
 
     return (

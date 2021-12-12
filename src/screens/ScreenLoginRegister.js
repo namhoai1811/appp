@@ -8,14 +8,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import apiClient from '../api/client'
 
 export default function Screen({navigation}){
-    // const getAll = async () => {
-    //     try {
-    //       const response =  await apiClient.get('users/show/60c45284ae8c0f00220f462b');
-    //       console.log("ga", response.data.data);
-    //     } catch(e){
-    //       console.log(e.message)
-    //     }
-    //   }
+    
     
         return (
             <View style={{

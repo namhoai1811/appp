@@ -7,10 +7,12 @@ import { createStackNavigator } from '@react-navigation/stack';
 import Login from './screens/Login';
 import Screen from './screens/ScreenLoginRegister';
 import Register from './screens/Register';
-const Stack = createStackNavigator();
 import { AuthContext } from './components/context';
 import ChangePass from './screens/ChangePassword'
 import apiClient from './api/client'
+
+const Stack = createStackNavigator();
+
 export default App = () => {
  
   const initialLoginState = {
@@ -110,7 +112,7 @@ export default App = () => {
         );
 
         if (res.status == 200) {
-          Alert.alert('Thành công!', 'Bạn đã đổi mật khẩu thành công', [
+          Alert.alert('Thành công!' , 'Bạn đã đổi mật khẩu thành công', [
             { text: 'Okay', onPress: () => navigation.navigate('Home') }
           ]);
         }

@@ -43,22 +43,24 @@ export default function RegisterName({ navigation }) {
     confirmPassword: '',
   };
   const { signUp } = React.useContext(AuthContext);
+  
   const register = async (values, formikActions) => {
     try {
       const res = await apiClient.post('/users/register', {
         ...values,
       });
-      // console.log(res.data)
+      console.log(res)
       if (res.status == 201) {
         signUp(res.data);
       }
     } catch (e) {
       Alert.alert('Invalid!', 'SĐT đã được đăng ký', [
-        { text: 'Okay' }
+        { text: e.message }
       ]);
       return;
     }
   };
+
   return (
     <FormContainer>
       <Formik

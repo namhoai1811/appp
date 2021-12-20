@@ -61,17 +61,27 @@ export default App = () => {
   const [loginState, dispatch] = React.useReducer(loginReducer, initialLoginState);
 
   const authContext = React.useMemo(() => ({
+
     signIn: async (data) => {
+      
       const userToken = data.token;
+      const userId = data.data.id;
+      console.log(userId);
+
       try {
+     
         await AsyncStorage.setItem('userToken', userToken);
+        // await AsyncStorage.setItem('userToken', userToken);
       } catch (e) {
         console.log(e);
       }
 
-      dispatch({ type: 'LOGIN', 
-      token: userToken });
+      dispatch({ 
+        type: 'LOGIN', 
+        token: userToken 
+      });
     },
+
     signOut: async () => {
 
       try {
@@ -92,7 +102,8 @@ export default App = () => {
         console.log(e);
       }
 
-      dispatch({ type: 'REGISTER',
+      dispatch({ 
+      type: 'REGISTER',
        token: userToken });
     },
     

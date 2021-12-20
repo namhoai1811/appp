@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect}  from 'react';
 import { Image, Text, View , Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import styles from './styles';
@@ -12,22 +12,38 @@ export default function ChatRoomItem({ chatRoom }) {
     const navigation = useNavigation()
     // const GetToken =  AsyncStorage.getItem('userToken');
 
+
+    // const [data, setData] = useState()
+    
+
     // const getAll = async () => {
-    //     try {
-    //       const response =  await apiClient.get('users/show/60c45284ae8c0f00220f462b');
-    //       console.log("ga", response.data.data);
-    //     } catch(e){
-    //       console.log(e.message)
+
+    //     // const userToken =  AsyncStorage.getItem('userToken');
+    //     const userToken = await AsyncStorage.getItem('userToken');
+
+    //     let auth = {
+    //         headers: {
+    //             authorization: "token " + userToken,
+    //         }
     //     }
-    //   }
-    const getAll = async () => {
-        try {
-          const response =  await apiClient.get('chats/getListChats');
-          console.log("ga", response.data.data);
-        } catch(e){
-          console.log(e.message)
-        }
-      }
+        
+    //     try {
+    //       const response =  await apiClient.get('chats/getListChats', auth);
+    //       if (response.data) {
+          
+    //         console.log("ga", response.data.data);
+    //         return response.data.data;
+              
+    //       }
+    //     } catch(e){
+    //       console.log('error when getting data ', e.message)
+    //     }
+    // }
+
+    // useEffect(() => {
+    //     setData(getAll());
+    // }, [])
+
 
     const _onPress = () => {
         // navigation.navigate('ChatRom', { id: chatRoom.id});

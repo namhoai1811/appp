@@ -38,6 +38,8 @@ export default function HomeChatScreen({navigation}) {
     }, [])
 
     return (
+        <>
+        {data &&
         <SafeAreaView style= {styles.page}>
             <FlatList
                 data={chatRoomsData}
@@ -45,6 +47,9 @@ export default function HomeChatScreen({navigation}) {
                 showsVerticalScrollIndicator={false}
             />
         </SafeAreaView>
+        }
+        </>
+        
         
     );
 }

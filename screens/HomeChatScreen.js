@@ -24,7 +24,7 @@ export default function HomeChatScreen({navigation}) {
           const response =  await apiClient.get('chats/getListChats', auth);
           if (response.data) {
           
-            console.log("ga", response.data.data);
+            // console.log("ga", response.data.data);
             return response.data.data;
               
           }

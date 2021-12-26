@@ -26,16 +26,16 @@ export default function ChatRoomItem({ chatRoom }) {
         try {
         const response =  await apiClient.get('users/show/60c490859ecf82002257f564', auth);
         if (response.data) {
-            // console.log(response.data.data);
-            setuserData(response.data.data); 
+            // setuserData(response.data.data); 
+            return response.data.data;
         }
         } catch(e){
         console.log('error when getting data ', e.message)
         }
     }
 
-    useEffect( async () => {
-        await getUser();
+    useEffect(  () => {
+        getUser().then(setuserData);
     }, [])
 
 

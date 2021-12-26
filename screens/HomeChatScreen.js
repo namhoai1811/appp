@@ -8,10 +8,10 @@ import chatRoomsData from '../assets/dummy-data/ChatRoomsData';
 
 export default function HomeChatScreen({navigation}) {
 
-    const [data, setData] = useState()
+    const [data, setData] = useState();
+
     const getAll = async () => {
 
-        // const userToken =  AsyncStorage.getItem('userToken');
         const userToken = await AsyncStorage.getItem('userToken');
 
         let auth = {
@@ -26,15 +26,14 @@ export default function HomeChatScreen({navigation}) {
           
             // console.log("ga", response.data.data);
             return response.data.data;
-              
           }
         } catch(e){
           console.log('error when getting data ', e.message)
         }
     }
 
-    useEffect(async () => {
-        setData( await getAll());
+    useEffect( () => {
+        getAll().then(setData);
     }, [])
 
     return (
@@ -43,8 +42,10 @@ export default function HomeChatScreen({navigation}) {
         <SafeAreaView style= {styles.page}>
             <FlatList
                 data={chatRoomsData}
+                keyExtractor={item => `${item.id}`}
                 renderItem = {({ item }) => <ChatRoomItem chatRoom= {item} /> }
                 showsVerticalScrollIndicator={false}
+
             />
         </SafeAreaView>
         }

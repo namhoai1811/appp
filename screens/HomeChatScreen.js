@@ -33,8 +33,8 @@ export default function HomeChatScreen({navigation}) {
         }
     }
 
-    useEffect(() => {
-        setData(getAll());
+    useEffect(async () => {
+        setData( await getAll());
     }, [])
 
     return (

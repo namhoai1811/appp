@@ -26,7 +26,7 @@ export default function ChatRoomItem({ chatRoom }) {
         try {
         const response =  await apiClient.get('users/show/60c490859ecf82002257f564', auth);
         if (response.data) {
-            console.log(response.data.data);
+            // console.log(response.data.data);
             setuserData(response.data.data); 
         }
         } catch(e){

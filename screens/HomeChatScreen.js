@@ -4,9 +4,8 @@ import ChatRoomItem from '../components/ChatRoomItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../api/Client';
 
-import chatRoomsData from '../assets/dummy-data/ChatRoomsData';
 
-export default function HomeChatScreen({navigation}) {
+export default function HomeChatScreen() {
 
     const [data, setData] = useState();
 
@@ -49,9 +48,7 @@ export default function HomeChatScreen({navigation}) {
             />
         </SafeAreaView>
         }
-        </>
-        
-        
+        </>       
     );
 }
 

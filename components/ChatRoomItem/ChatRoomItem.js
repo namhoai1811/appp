@@ -2,7 +2,6 @@ import React, { useState, useEffect}  from 'react';
 import { Image, Text, View , Pressable } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import styles from './styles';
-// import GetToken from '../../api/GetToken';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../../api/Client';
 
@@ -11,13 +10,8 @@ export default function ChatRoomItem({ chatRoom }) {
     
     const navigation = useNavigation();
     const [userData, setuserData] = useState();
+    console.log(chatRoom)
     
-    // const userId =  AsyncStorage.getItem('userId');
-    // const userId =  AsyncStorage.getItem('userToken');
-    // console.log(userId);
-    // console.log(chatRoom.member[0] , userId);
-    // if (chatRoom.member[1]==userId._W) console.log('ga');
-
     const getUser = async () => {
 
         const userToken = await AsyncStorage.getItem('userToken');
@@ -25,11 +19,8 @@ export default function ChatRoomItem({ chatRoom }) {
 
         let userFriend = '';
 
-        // console.log('ga',userId);
-        // console.log(chatRoom.member[1]);
         if (chatRoom.member[0]==userId) userFriend = chatRoom.member[1];
         else userFriend = chatRoom.member[0];
-        // console.log('ga1',userFriend)
 
         let auth = {
             headers: {
@@ -38,11 +29,9 @@ export default function ChatRoomItem({ chatRoom }) {
         }
         
         try {
-        // const response =  await apiClient.get(`users/show/60c490859ecf82002257f564`, auth);
+
         const response =  await apiClient.get(`users/show/${userFriend}`, auth);
             if (response.data) {
-
-                // console.log(response.data.data.avatar.fileName)
                 return response.data.data;
         }
         } catch(e){
@@ -56,7 +45,7 @@ export default function ChatRoomItem({ chatRoom }) {
 
 
     const _onPress = () => {
-        navigation.navigate('ChatRom', { id: chatRoom._id});
+        navigation.navigate('ChatRom', { _id: chatRoom._id});
     }
 
     return (

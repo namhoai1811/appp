@@ -13,7 +13,7 @@ export default function ChatRommScreen() {
     const route = useRoute();
     const navigation = useNavigation();
 
-    // alert(route.params?.id);
+    // alert(route.params?._id);
 
     useLayoutEffect(() => {
     navigation.setOptions({
@@ -26,7 +26,7 @@ export default function ChatRommScreen() {
       title: ' Nam',
       headerRight: () => <View><Icon name={"menu"} size={40} /></View>,
     });
-  }, []);
+    }, []);
  
     return (
         <SafeAreaView style = {styles.page}>

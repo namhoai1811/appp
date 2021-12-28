@@ -25,8 +25,6 @@ export default function AppNavi() {
             options = {{ 
                 headerTitle: (props) => <ChatRoomHeader {...props} />, 
                 headerBackTitleVisible: false,
-               
-
             }}
             />
             </Stack.Navigator>

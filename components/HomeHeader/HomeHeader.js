@@ -13,8 +13,6 @@ import apiClient from '../../api/Client';
 // import { Auth, DataStore } from "aws-amplify";
 // import { ChatRoom, ChatRoomUser, User } from "../src/models";
 // import moment from "moment";
-import { useNavigation } from "@react-navigation/core";
-
 
 const HomeHeader = (props) => {
 
@@ -130,6 +128,8 @@ const HomeHeader = (props) => {
 
   
     return (
+      <>
+      {userData && 
       <View
         style={{
           // backgroundColor: 'red',
@@ -146,15 +146,6 @@ const HomeHeader = (props) => {
           }}
           style={{ width: 30, height: 30, borderRadius: 30 }}
         />
-  
-        {/* <Pressable onPress={openInfo} style={{ flex: 1, marginLeft: 10 }}>
-          <Text style={{ fontWeight: "bold" }}>
-            {chatRoom?.name || user?.name}
-          </Text>
-          <Text numberOfLines={1}>
-            {isGroup ? getUsernames() : getLastOnlineText()}
-          </Text>
-        </Pressable> */}
   
         <Text style={{ 
             flex: 1, 
@@ -174,13 +165,9 @@ const HomeHeader = (props) => {
           onPress={_onPress}
         />
 
-        {/* <Feather
-          name="video"
-          size={24}
-          color="black"
-          style={{ marginHorizontal: 10 }}
-        /> */}
       </View>
+      }
+      </>
     );
   };
   

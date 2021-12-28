@@ -46,7 +46,8 @@ export default function ChatRoomItem({ chatRoom }) {
     return (
         <>
         {userData && 
-        <Pressable style={styles.container}
+        <Pressable 
+            style={styles.container}
             onPress={_onPress}
         >
             <Image source={{uri: `http://192.168.1.13:8000/files/0d396ef3-d749-4b83-a768-bfb6533990f4.png`}} style={styles.image}></Image>

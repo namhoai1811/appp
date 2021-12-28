@@ -25,11 +25,11 @@ export default function ChatRoomItem({ chatRoom }) {
 
         let userFriend = '';
 
-        console.log('ga',userId);
-        console.log(chatRoom.member[1]);
+        // console.log('ga',userId);
+        // console.log(chatRoom.member[1]);
         if (chatRoom.member[0]==userId) userFriend = chatRoom.member[1];
         else userFriend = chatRoom.member[0];
-        console.log('ga1',userFriend)
+        // console.log('ga1',userFriend)
 
         let auth = {
             headers: {
@@ -41,7 +41,8 @@ export default function ChatRoomItem({ chatRoom }) {
         // const response =  await apiClient.get(`users/show/60c490859ecf82002257f564`, auth);
         const response =  await apiClient.get(`users/show/${userFriend}`, auth);
             if (response.data) {
-                // setuserData(response.data.data); 
+
+                // console.log(response.data.data.avatar.fileName)
                 return response.data.data;
         }
         } catch(e){
@@ -65,7 +66,7 @@ export default function ChatRoomItem({ chatRoom }) {
             style={styles.container}
             onPress={_onPress}
         >
-            <Image source={{uri: `http://192.168.1.13:8000/files/0d396ef3-d749-4b83-a768-bfb6533990f4.png`}} style={styles.image}></Image>
+            <Image source={{uri: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`}} style={styles.image}></Image>
             
             {/* { chatRoom.newMessages ? <View style= {styles.badgeContainer}>
                 <Text style= {styles.badgeText}>{chatRoom.newMessages} </Text>

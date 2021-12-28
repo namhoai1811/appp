@@ -60,9 +60,3 @@ const styles = StyleSheet.create({
         flexDirection: "row",
     },
 })
-
-// const styles = StyleSheet.create({
-//   headerLeft: {
-//     flexDirection: "row",
-//   },
-// });

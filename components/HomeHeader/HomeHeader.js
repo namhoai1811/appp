@@ -19,6 +19,40 @@ import { useNavigation } from "@react-navigation/core";
 const HomeHeader = (props) => {
 
     // const {width} = useWindowDimensions();
+    const [userData, setuserData] = useState();
+    
+    const getUser = async () => {
+
+      const userToken = await AsyncStorage.getItem('userToken');
+      const userId = await AsyncStorage.getItem('userId');
+
+  
+
+      let auth = {
+          headers: {
+              authorization: "token " + userToken,
+          }
+      }
+      
+      try {
+      // const response =  await apiClient.get(`users/show/60c490859ecf82002257f564`, auth);
+      const response =  await apiClient.get(`users/show/${userId}`, auth);
+          if (response.data) {
+
+              // console.log(response.data.data.avatar.fileName)
+              return response.data.data;
+      }
+      } catch(e){
+      console.log('error when getting data ', e.message)
+      }
+  }
+
+  useEffect(  () => {
+      getUser().then(setuserData);
+  }, [])
+
+
+
     const userId =  AsyncStorage.getItem('userId');
     const listFriends = async () => {
       const userToken = await AsyncStorage.getItem('userToken');
@@ -91,7 +125,7 @@ const HomeHeader = (props) => {
     const _onPress = () => {
       // listFriends();
       // sendMessage();
-      console.log(userId._W)
+      // console.log(userId._W)
     }
 
   
@@ -108,7 +142,7 @@ const HomeHeader = (props) => {
       >
         <Image
           source={{
-            uri: 'https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/elon.png',
+            uri: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
           }}
           style={{ width: 30, height: 30, borderRadius: 30 }}
         />

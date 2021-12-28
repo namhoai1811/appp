@@ -41,8 +41,8 @@ export default function HomeChatScreen({navigation}) {
         {data &&
         <SafeAreaView style= {styles.page}>
             <FlatList
-                data={chatRoomsData}
-                keyExtractor={item => `${item.id}`}
+                data={data}
+                keyExtractor={item => `${item._id}`}
                 renderItem = {({ item }) => <ChatRoomItem chatRoom= {item} /> }
                 showsVerticalScrollIndicator={false}
 

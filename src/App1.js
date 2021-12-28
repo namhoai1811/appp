@@ -71,7 +71,7 @@ export default App = () => {
       try {
      
         await AsyncStorage.setItem('userToken', userToken);
-        // await AsyncStorage.setItem('userToken', userToken);
+        await AsyncStorage.setItem('userId', userId);
       } catch (e) {
         console.log(e);
       }
@@ -86,6 +86,7 @@ export default App = () => {
 
       try {
         await AsyncStorage.removeItem('userToken');
+        await AsyncStorage.removeItem('userId');
       } catch (e) {
         console.log(e);
       }
@@ -94,10 +95,11 @@ export default App = () => {
 
     signUp: async (data) => {
       const userToken = data.token;
-      const id = data.data.id;
+      const userId = data.data.id;
       const phone = data.data.phone;
       try {
         await AsyncStorage.setItem('userToken', userToken);
+        await AsyncStorage.setItem('userId', userId);
       } catch (e) {
         console.log(e);
       }

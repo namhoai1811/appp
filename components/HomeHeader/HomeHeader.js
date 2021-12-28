@@ -19,9 +19,10 @@ import { useNavigation } from "@react-navigation/core";
 const HomeHeader = (props) => {
 
     // const {width} = useWindowDimensions();
-
+    const userId =  AsyncStorage.getItem('userId');
     const listFriends = async () => {
       const userToken = await AsyncStorage.getItem('userToken');
+     
       try {
           const response = await apiClient.post('/friends/list',
               {
@@ -88,8 +89,9 @@ const HomeHeader = (props) => {
     
 
     const _onPress = () => {
-      listFriends();
+      // listFriends();
       // sendMessage();
+      console.log(userId._W)
     }
 
   

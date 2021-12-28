@@ -23,8 +23,8 @@ export default function ChatNavigation() {
             name="ChatRom" 
             component={ChatRommScreen}
             options = {{ 
-                headerTitle: (props) => <ChatRoomHeader {...props} />, 
-                headerBackTitleVisible: true,
+                // headerTitle: (props) => <ChatRoomHeader {...props} />, 
+                headerBackTitleVisible: false,
             
             }}
             />

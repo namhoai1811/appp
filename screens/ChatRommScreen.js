@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useLayoutEffect} from 'react';
 import { Text, View, StyleSheet, FlatList, SafeAreaView } from 'react-native';
 import { useRoute, useNavigation } from '@react-navigation/core';
+import { Avatar, Icon } from "react-native-elements";
 
 import Message from '../components/Message';
 
@@ -14,8 +15,19 @@ export default function ChatRommScreen() {
 
     // alert(route.params?.id);
 
-    navigation.setOptions({title: 'Hoai Ndddam'})
-
+    useLayoutEffect(() => {
+    navigation.setOptions({
+      headerLeft: () => (
+        <View style={styles.headerLeft}>
+          <Icon name={"chevron-left"} size={40} onPress={() => {navigation.navigate("HomeChat")}} />
+          <Avatar rounded source={{uri : "https://notjustdev-dummy.s3.us-east-2.amazonaws.com/avatars/vadim.jpg"}} />
+        </View>
+      ),
+      title: ' Nam',
+      headerRight: () => <View><Icon name={"menu"} size={40} /></View>,
+    });
+  }, []);
+ 
     return (
         <SafeAreaView style = {styles.page}>
             <View style={styles.list1}>
@@ -43,6 +55,14 @@ const styles = StyleSheet.create({
     },
     list2: {
         height: '10%'
-        
-    }
+    },
+    headerLeft: {
+        flexDirection: "row",
+    },
 })
+
+// const styles = StyleSheet.create({
+//   headerLeft: {
+//     flexDirection: "row",
+//   },
+// });

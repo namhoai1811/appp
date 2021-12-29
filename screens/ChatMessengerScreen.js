@@ -3,8 +3,13 @@ import { GiftedChat } from 'react-native-gifted-chat';
 import React, { useState, useCallback, useEffect, useLayoutEffect, useRef } from "react";
 import { useRoute, useNavigation } from '@react-navigation/core';
 import { Avatar, Icon } from "react-native-elements";
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+
 
 import { getMessages, sendMessage} from '../components/ChatRoomItem/apiMessager';
+
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["EventEmitter.removeListener"]);
 
 
 export default function ChatMessengerScreen() {
@@ -13,12 +18,9 @@ export default function ChatMessengerScreen() {
     const navigation = useNavigation();
     const [messages, setMessages] = useState([]);
     const { chatId, userData, userId } = route.params;
-    // console.log(userData)
     const receiverId = userData._id;
     const senderId = userId;
-    console.log(chatId)
-    
-  
+    // console.log(userId)
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -34,21 +36,6 @@ export default function ChatMessengerScreen() {
         headerRight: () => <View><Icon onPress = {fetchMessages} name={"menu"} size={40} /></View>,
         });
     }, []);
-
-    // useEffect(() => {
-    //     setMessages([
-    //     {
-    //         _id: 1,
-    //         text: 'Hello developer',
-    //         createdAt: new Date(),
-    //         user: {
-    //         _id: 2,
-    //         name: 'React Native',
-    //         avatar: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
-    //         },
-    //     },
-    //     ])
-    // }, [])
 
     const fetchMessages = async () => {
         try {
@@ -86,7 +73,6 @@ export default function ChatMessengerScreen() {
     const onSend = useCallback(async (messages = []) => {
         if (messages.length > 0) {
             const newMsgObj = messages[0];
-            // console.log('faaaaa',newMsgObj)
             try {
               const sendResult = await sendMessage(
                 chatId,
@@ -121,6 +107,13 @@ export default function ChatMessengerScreen() {
             });
     }
 
+    const scrollToBottomComponent = () => {
+        return(
+          <FontAwesome5 name='arrow-alt-circle-down' size={22} color='blue' />
+        //   <Text>ddddd</Text>
+        );
+      }
+
     return (
 
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
@@ -129,8 +122,14 @@ export default function ChatMessengerScreen() {
             messages={messages}
             placeholder = 'Tin nhắn'
             showAvatarForEveryMessage={true}
+
+            scrollToBottom
+            scrollToBottomComponent={scrollToBottomComponent}
+
             onSend={messages => onSend(messages)}
             onLongPress={onLongPress}
+
+
             user={{
                 _id: userId,
             }}         

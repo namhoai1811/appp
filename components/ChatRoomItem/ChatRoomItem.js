@@ -11,19 +11,20 @@ export default function ChatRoomItem({ chatRoom }) {
     const navigation = useNavigation();
     const [userData, setuserData] = useState();
     const [userId, setUserId] = useState()
-    // let userId='';
     let userFriend = '';
-    // console.log(chatRoom);
+    console.log(chatRoom.member);
     
     
     const getUser = async () => {
 
         const userToken = await AsyncStorage.getItem('userToken');
-        // userId = 
-        setUserId(await AsyncStorage.getItem('userId'));
+        let userId1 = await AsyncStorage.getItem('userId')
+        setUserId(userId1);
+        console.log('ga',userId1)
 
-        if (chatRoom.member[0]==userId) userFriend = chatRoom.member[1];
+        if (chatRoom.member[0]==userId1) userFriend = chatRoom.member[1];
         else userFriend = chatRoom.member[0];
+        console.log('ban be',userFriend)
 
         let auth = {
             headers: {

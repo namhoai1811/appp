@@ -10,14 +10,17 @@ export default function ChatRoomItem({ chatRoom }) {
     
     const navigation = useNavigation();
     const [userData, setuserData] = useState();
-    console.log(chatRoom)
+    const [userId, setUserId] = useState()
+    // let userId='';
+    let userFriend = '';
+    // console.log(chatRoom);
+    
     
     const getUser = async () => {
 
         const userToken = await AsyncStorage.getItem('userToken');
-        const userId = await AsyncStorage.getItem('userId');
-
-        let userFriend = '';
+        // userId = 
+        setUserId(await AsyncStorage.getItem('userId'));
 
         if (chatRoom.member[0]==userId) userFriend = chatRoom.member[1];
         else userFriend = chatRoom.member[0];
@@ -27,7 +30,6 @@ export default function ChatRoomItem({ chatRoom }) {
                 authorization: "token " + userToken,
             }
         }
-        
         try {
 
         const response =  await apiClient.get(`users/show/${userFriend}`, auth);
@@ -45,7 +47,12 @@ export default function ChatRoomItem({ chatRoom }) {
 
 
     const _onPress = () => {
-        navigation.navigate('ChatRom', { _id: chatRoom._id});
+        navigation.navigate('ChatRom1', { 
+            chatId: chatRoom._id,
+            userData : userData,
+            userId: userId
+            
+        } );
     }
 
     return (

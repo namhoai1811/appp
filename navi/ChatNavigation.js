@@ -6,6 +6,7 @@ import HomeChatScreen from '../screens/HomeChatScreen';
 import ChatRommScreen from '../screens/ChatRommScreen';
 import HomeHeader from '../components/HomeHeader/HomeHeader';
 import ChatRoomHeader from '../components/ChatRoomHeader/ChatRoomHeader';
+import ChatMessengerScreen from '../screens/ChatMessengerScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -28,6 +29,16 @@ export default function ChatNavigation() {
             
             }}
             />
+
+            <Stack.Screen 
+            name="ChatRom1" 
+            component={ChatMessengerScreen}
+            options = {{ 
+                // headerTitle: (props) => <ChatRoomHeader {...props} />, 
+                headerBackTitleVisible: false,
+            }}
+            />
+
             </Stack.Navigator>
         </NavigationContainer>
     );

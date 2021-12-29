@@ -1,16 +1,13 @@
-
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import React from 'react';
+import {StyleSheet} from 'react-native';
 
 import ChatNavigation from './navi/ChatNavigation';
-import App1 from './src/App1'
+import App1 from './src/App1';
 
 export default function App() {
   return (
-
-    <ChatNavigation/>
+    <ChatNavigation />
     // <App1/>
-  
   );
 }
 

@@ -1,87 +1,74 @@
-import React, { useState, useEffect}  from 'react';
-import { Image, Text, View , Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/core';
+import React, {useState, useEffect} from 'react';
+import {Image, Text, View, Pressable} from 'react-native';
+import {useNavigation} from '@react-navigation/core';
 import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../../api/Client';
 
-export default function ChatRoomItem({ chatRoom }) {
-    
-    
-    const navigation = useNavigation();
-    const [userData, setuserData] = useState();
-    const [userId, setUserId] = useState()
-    let userFriend = '';
-    console.log(chatRoom.member);
-    
-    
-    const getUser = async () => {
+export default function ChatRoomItem({chatRoom}) {
+  const navigation = useNavigation();
+  const [userData, setuserData] = useState();
+  const [userId, setUserId] = useState();
+  let userFriend = '';
 
-        const userToken = await AsyncStorage.getItem('userToken');
-        let userId1 = await AsyncStorage.getItem('userId')
-        setUserId(userId1);
-        console.log('ga',userId1)
+  const getUser = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    let userId1 = await AsyncStorage.getItem('userId');
+    setUserId(userId1);
 
-        if (chatRoom.member[0]==userId1) userFriend = chatRoom.member[1];
-        else userFriend = chatRoom.member[0];
-        console.log('ban be',userFriend)
+    if (chatRoom.member[0] == userId1) userFriend = chatRoom.member[1];
+    else userFriend = chatRoom.member[0];
 
-        let auth = {
-            headers: {
-                authorization: "token " + userToken,
-            }
-        }
-        try {
-
-        const response =  await apiClient.get(`users/show/${userFriend}`, auth);
-            if (response.data) {
-                return response.data.data;
-        }
-        } catch(e){
-        console.log('error when getting data ', e.message)
-        }
+    let auth = {
+      headers: {
+        authorization: 'token ' + userToken,
+      },
+    };
+    try {
+      const response = await apiClient.get(`users/show/${userFriend}`, auth);
+      if (response.data) {
+        return response.data.data;
+      }
+    } catch (e) {
+      console.log('error when getting data ', e.message);
     }
+  };
 
-    useEffect(  () => {
-        getUser().then(setuserData);
-    }, [])
+  useEffect(() => {
+    getUser().then(setuserData);
+  }, []);
 
+  const _onPress = () => {
+    navigation.navigate('ChatRom', {
+      chatId: chatRoom._id,
+      userData: userData,
+      userId: userId,
+    });
+  };
 
-    const _onPress = () => {
-        navigation.navigate('ChatRom1', { 
-            chatId: chatRoom._id,
-            userData : userData,
-            userId: userId
-            
-        } );
-    }
+  return (
+    <>
+      {userData && (
+        <Pressable style={styles.container} onPress={_onPress}>
+          <Image
+            source={{
+              uri: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
+            }}
+            style={styles.image}></Image>
 
-    return (
-        <>
-        {userData && 
-        <Pressable 
-            style={styles.container}
-            onPress={_onPress}
-        >
-            <Image source={{uri: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`}} style={styles.image}></Image>
-            
-            {/* { chatRoom.newMessages ? <View style= {styles.badgeContainer}>
+          {/* { chatRoom.newMessages ? <View style= {styles.badgeContainer}>
                 <Text style= {styles.badgeText}>{chatRoom.newMessages} </Text>
             </View> :null} */}
 
-            <View style={styles.rightContainer}>     
-                <View style= {styles.row}>
-                    <Text style={styles.name}>{userData.username} </Text>
-                    <Text style={styles.text}>{chatRoom.createdAt}</Text>
-                </View>
-                {/* <Text numberOfLines={1}  style={styles.text}>{chatRoom.lastMessage.content} </Text> */}
-            </View>    
-            
+          <View style={styles.rightContainer}>
+            <View style={styles.row}>
+              <Text style={styles.name}>{userData.username} </Text>
+              <Text style={styles.text}>{chatRoom.createdAt}</Text>
+            </View>
+            {/* <Text numberOfLines={1}  style={styles.text}>{chatRoom.lastMessage.content} </Text> */}
+          </View>
         </Pressable>
-        }
-        </>
-    
-    );
+      )}
+    </>
+  );
 }
-
-

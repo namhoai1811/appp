@@ -59,49 +59,29 @@ export default function ChatMessengerScreen() {
           }
     };
 
-    // useEffect(() => {
-    //     const initialize = async () => {
-    //       const newMessages = await fetchMessages();
-    //       setMessages(
-    //         newMessages.map((msg) => ({
-    //           _id: msg._id,
-    //           text: msg.content,
-    //           createdAt: msg.createdAt,
-    //           user: {
-    //             _id: msg.user._id,
-    //             name: msg.user.username,
-    //           },
-    //         }))
-    //           .reverse()
-    //       );
+    useEffect(() => {
+        const initialize = async () => {
+          const newMessages = await fetchMessages();
+          setMessages(
+            newMessages.map((msg) => ({
+              _id: msg._id,
+              text: msg.content,
+              createdAt: msg.createdAt,
+              user: {
+                _id: msg.user._id,
+                name: msg.user.username,
+                avatar: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
+              },
+            }))
+              .reverse()
+          );
     
     
-    //     //   socket.current = io(SOCKET_URL);
-    //     };
-    //     initialize();
-    // }, []);
+        //   socket.current = io(SOCKET_URL);
+        };
+        initialize();
+    }, []);
 
-//   const onLongPress = (context, message) => {
-//     const options = ['Copy', 'Delete Message', 'Cancel'];
-//     const cancelButtonIndex = options.length - 1;
-//     context.actionSheet().showActionSheetWithOptions({
-//       options,
-//       cancelButtonIndex
-//     }, (buttonIndex) => {
-//       switch (buttonIndex) {
-//         case 0:
-//           Clipboard.setString(message.text);
-//           break;
-//         case 1:
-//           onDelete(message._id) //pass the function here
-//           break;
-//       }
-//     });
-//   }
-
-    // const onSend = useCallback((messages = []) => {
-    //     setMessages(previousMessages => GiftedChat.append(previousMessages, messages))
-    // }, [])
 
     const onSend = useCallback(async (messages = []) => {
         if (messages.length > 0) {
@@ -123,6 +103,24 @@ export default function ChatMessengerScreen() {
           }
     }, []);
 
+    const onLongPress = (context, message) => {
+        const options = ['Copy', 'Delete Message', 'Cancel'];
+            const cancelButtonIndex = options.length - 1;
+            context.actionSheet().showActionSheetWithOptions({
+              options,
+              cancelButtonIndex
+            }, (buttonIndex) => {
+              switch (buttonIndex) {
+                case 0:
+                  Clipboard.setString(message.text);
+                  break;
+                case 1:
+                  onDelete(message._id) //pass the function here
+                  break;
+              }
+            });
+    }
+
     return (
 
         <TouchableWithoutFeedback onPress={() => {Keyboard.dismiss()}}>
@@ -132,8 +130,9 @@ export default function ChatMessengerScreen() {
             placeholder = 'Tin nhắn'
             showAvatarForEveryMessage={true}
             onSend={messages => onSend(messages)}
+            onLongPress={onLongPress}
             user={{
-                _id: 1,
+                _id: userId,
             }}         
         /> 
         </View>

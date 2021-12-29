@@ -46,22 +46,14 @@ const getMessages = async (chatId) => {
             }
         );
         if (response.status == 200) {
-            console.log('chet' ,response.data)
-            return response.data;
+            console.log('chet' ,response.data.data)
+            return response.data.data;
         }
     }
     catch (e) {
         console.log("ga", e.message)
     }
 
-    // const getResult = await api({
-    //     method: 'GET',
-    //     url: `/chats/getMessages/${chatId}`,
-    //     headers: {
-    //         'Authorization': `Bearer ${token}`
-    //     }
-    // });
-    // return getResult;
 }
 
 // const sendMessage = async (chatId, senderId, receiverId, msg, token) => {

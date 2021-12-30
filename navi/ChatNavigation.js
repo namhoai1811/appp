@@ -4,7 +4,8 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import HomeChatScreen from '../screens/HomeChatScreen';
 import HomeHeader from '../components/HomeHeader/HomeHeader';
 import ChatMessengerScreen from '../screens/ChatMessengerScreen';
-
+import MessageSettingScreen from '../screens/MessageSettingScreen';
+import Fried from '../screens/Fried';
 const Stack = createNativeStackNavigator();
 
 export default function ChatNavigation() {
@@ -20,6 +21,22 @@ export default function ChatNavigation() {
         <Stack.Screen
           name="ChatRom"
           component={ChatMessengerScreen}
+          options={{
+            headerBackTitleVisible: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="MessageSetting"
+          component={MessageSettingScreen}
+          options={{
+            headerBackTitleVisible: false,
+          }}
+        />
+
+        <Stack.Screen
+          name="Fried"
+          component={Fried}
           options={{
             headerBackTitleVisible: false,
           }}

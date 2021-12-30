@@ -4,42 +4,21 @@ import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../../api/Client';
 import {getUser} from './api';
+import {useRoute, useNavigation} from '@react-navigation/core';
 
 const HomeHeader = props => {
   const [userData, setuserData] = useState();
+  const navigation = useNavigation();
 
   useEffect(() => {
     getUser().then(setuserData);
   }, []);
 
-  const userId = AsyncStorage.getItem('userId');
-  const listFriends = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-
-    try {
-      const response = await apiClient.post(
-        '/friends/list',
-        {},
-        {
-          headers: {
-            authorization: 'token ' + userToken,
-          },
-        },
-      );
-      if (response.status == 200) {
-        console.log(response.data.data.friends);
-        return response.data.data.friends;
-      }
-
-      // }
-    } catch (e) {
-      console.log('ga', e.message);
-    }
-  };
 
   const _onPress = () => {
+    navigation.navigate('Fried');
     // listFriends();
-    // console.log(userId._W)
+
   };
 
   return (

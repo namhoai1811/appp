@@ -1,9 +1,6 @@
 import {
-  Text,
   View,
   StyleSheet,
-  FlatList,
-  SafeAreaView,
   TouchableWithoutFeedback,
   Keyboard,
 } from 'react-native';
@@ -15,11 +12,18 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
+
 import {useRoute, useNavigation} from '@react-navigation/core';
+import {useIsFocused} from '@react-navigation/native';
+
 import {Avatar, Icon} from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import {getMessages, sendMessage,deleteMessage} from '../components/ChatRoomItem/apiMessager';
+import {
+  getMessages,
+  sendMessage,
+  deleteMessage,
+} from '../components/ChatRoomItem/apiMessager';
 
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['EventEmitter.removeListener']);
@@ -27,11 +31,11 @@ LogBox.ignoreLogs(['EventEmitter.removeListener']);
 export default function ChatMessengerScreen() {
   const route = useRoute();
   const navigation = useNavigation();
+  const isFocused = useIsFocused();
   const [messages, setMessages] = useState([]);
   const {chatId, userData, userId} = route.params;
   const receiverId = userData._id;
   const senderId = userId;
-  // console.log(userId)
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -55,12 +59,42 @@ export default function ChatMessengerScreen() {
       title: `          ${userData.username}`,
       headerRight: () => (
         <View>
-          <Icon onPress={fetchMessages} name={'menu'} size={40} />
+          <Icon onPress={_setting} name={'menu'} size={40} />
         </View>
       ),
     });
+
+    
+
   }, []);
 
+  if(chatId) {
+    useEffect(() => {
+      const initialize = async () => {
+        const newMessages = await fetchMessages();
+        setMessages(
+          newMessages
+            .map(msg => ({
+              _id: msg._id,
+              text: msg.content,
+              createdAt: msg.createdAt,
+              user: {
+                _id: msg.user._id,
+                name: msg.user.username,
+                avatar: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
+              },
+            }))
+            .reverse(),
+        );
+  
+        //   socket.current = io(SOCKET_URL);
+      };
+      initialize();
+    }, [isFocused]);
+  }
+  const _setting = () => {
+    navigation.navigate('MessageSetting', {chatId: chatId});
+  };
   const fetchMessages = async () => {
     try {
       const res = await getMessages(chatId);
@@ -70,28 +104,28 @@ export default function ChatMessengerScreen() {
     }
   };
 
-  useEffect(() => {
-    const initialize = async () => {
-      const newMessages = await fetchMessages();
-      setMessages(
-        newMessages
-          .map(msg => ({
-            _id: msg._id,
-            text: msg.content,
-            createdAt: msg.createdAt,
-            user: {
-              _id: msg.user._id,
-              name: msg.user.username,
-              avatar: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
-            },
-          }))
-          .reverse(),
-      );
+  // useEffect(() => {
+  //   const initialize = async () => {
+  //     const newMessages = await fetchMessages();
+  //     setMessages(
+  //       newMessages
+  //         .map(msg => ({
+  //           _id: msg._id,
+  //           text: msg.content,
+  //           createdAt: msg.createdAt,
+  //           user: {
+  //             _id: msg.user._id,
+  //             name: msg.user.username,
+  //             avatar: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
+  //           },
+  //         }))
+  //         .reverse(),
+  //     );
 
-      //   socket.current = io(SOCKET_URL);
-    };
-    initialize();
-  }, []);
+  //     //   socket.current = io(SOCKET_URL);
+  //   };
+  //   initialize();
+  // }, [isFocused]);
 
   const onSend = useCallback(async (messages = []) => {
     if (messages.length > 0) {
@@ -119,7 +153,6 @@ export default function ChatMessengerScreen() {
       setMessages(
         messages.filter(message => message._id !== messageIdToDelete),
       );
-      
     } catch (err) {
       console.log(err);
     }

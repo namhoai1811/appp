@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../../api/Client';
+import {Alert} from 'react-native';
 
 const sendMessage = async (chatId, senderId, receiverId, msg) => {
   const userToken = await AsyncStorage.getItem('userToken');
@@ -24,7 +25,7 @@ const sendMessage = async (chatId, senderId, receiverId, msg) => {
       return response.data;
     }
   } catch (e) {
-    console.log('ga', e.message);
+    console.log(e.message);
   }
 };
 
@@ -37,23 +38,30 @@ const getMessages = async chatId => {
       },
     });
     if (response.status == 200) {
-      // console.log('chet' ,response.data.data)
       return response.data.data;
     }
   } catch (e) {
-    console.log('ga', e.message);
+    console.log(e.message);
   }
 };
 
-// const deleteMessage = async (messageId, token) => {
-//     const getResult = await api({
-//         method: 'GET',
-//         url: `/chats/deleteMess/${messageId}`,
-//         headers: {
-//             'Authorization': `Bearer ${token}`
-//         }
-//     });
-//     return getResult;
-// }
+const deleteMessage = async messageIdToDelete => {
+  const userToken = await AsyncStorage.getItem('userToken');
+  try {
+    const response = await apiClient.get(
+      `/chats/deleteMessage/${messageIdToDelete}`,
+      {
+        headers: {
+          authorization: 'token ' + userToken,
+        },
+      },
+    );
+    if (response.status == 200) {
+      Alert.alert('Thông báo!', response.data.message, [{text: 'Okay'}]);
+    }
+  } catch (e) {
+    console.log(e.message);
+  }
+};
 
-export {getMessages, sendMessage};
+export {getMessages, sendMessage, deleteMessage};

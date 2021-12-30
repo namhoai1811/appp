@@ -19,7 +19,7 @@ import {useRoute, useNavigation} from '@react-navigation/core';
 import {Avatar, Icon} from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
-import {getMessages, sendMessage} from '../components/ChatRoomItem/apiMessager';
+import {getMessages, sendMessage,deleteMessage} from '../components/ChatRoomItem/apiMessager';
 
 import {LogBox} from 'react-native';
 LogBox.ignoreLogs(['EventEmitter.removeListener']);
@@ -112,6 +112,19 @@ export default function ChatMessengerScreen() {
     }
   }, []);
 
+  const onDelete = async messageIdToDelete => {
+    try {
+      const deleteMess = await deleteMessage(messageIdToDelete);
+      // console.log(messageIdToDelete)
+      setMessages(
+        messages.filter(message => message._id !== messageIdToDelete),
+      );
+      
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const onLongPress = (context, message) => {
     const options = ['Copy', 'Delete Message', 'Cancel'];
     const cancelButtonIndex = options.length - 1;
@@ -134,10 +147,7 @@ export default function ChatMessengerScreen() {
   };
 
   const scrollToBottomComponent = () => {
-    return (
-      <FontAwesome5 name="arrow-alt-circle-down" size={22} color="blue" />
-
-    );
+    return <FontAwesome5 name="arrow-alt-circle-down" size={22} color="blue" />;
   };
 
   return (

@@ -63,12 +63,9 @@ export default function ChatMessengerScreen() {
         </View>
       ),
     });
-
-    
-
   }, []);
 
-  if(chatId) {
+  if (chatId) {
     useEffect(() => {
       const initialize = async () => {
         const newMessages = await fetchMessages();
@@ -86,14 +83,14 @@ export default function ChatMessengerScreen() {
             }))
             .reverse(),
         );
-  
+
         //   socket.current = io(SOCKET_URL);
       };
       initialize();
     }, [isFocused]);
   }
   const _setting = () => {
-    navigation.navigate('MessageSetting', {chatId: chatId});
+    navigation.navigate('MessageSetting', {chatId: chatId, userData: userData});
   };
   const fetchMessages = async () => {
     try {
@@ -103,29 +100,6 @@ export default function ChatMessengerScreen() {
       console.log(err);
     }
   };
-
-  // useEffect(() => {
-  //   const initialize = async () => {
-  //     const newMessages = await fetchMessages();
-  //     setMessages(
-  //       newMessages
-  //         .map(msg => ({
-  //           _id: msg._id,
-  //           text: msg.content,
-  //           createdAt: msg.createdAt,
-  //           user: {
-  //             _id: msg.user._id,
-  //             name: msg.user.username,
-  //             avatar: `http://192.168.1.13:8000/files/${userData.avatar.fileName}`,
-  //           },
-  //         }))
-  //         .reverse(),
-  //     );
-
-  //     //   socket.current = io(SOCKET_URL);
-  //   };
-  //   initialize();
-  // }, [isFocused]);
 
   const onSend = useCallback(async (messages = []) => {
     if (messages.length > 0) {
@@ -149,7 +123,7 @@ export default function ChatMessengerScreen() {
   const onDelete = async messageIdToDelete => {
     try {
       const deleteMess = await deleteMessage(messageIdToDelete);
-      // console.log(messageIdToDelete)
+   
       setMessages(
         messages.filter(message => message._id !== messageIdToDelete),
       );

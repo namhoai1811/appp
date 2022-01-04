@@ -9,7 +9,6 @@ import {
 } from 'react-native';
 import {useIsFocused} from '@react-navigation/native';
 
-
 import ChatRoomItem from '../components/ChatRoomItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../api/Client';
@@ -18,7 +17,6 @@ export default function HomeChatScreen() {
   const isFocused = useIsFocused();
 
   const [data, setData] = useState();
-  
 
   const getListChats = async () => {
     const userToken = await AsyncStorage.getItem('userToken');

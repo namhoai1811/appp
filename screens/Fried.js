@@ -9,36 +9,11 @@ export default function Fried() {
   const navigation = useNavigation();
 
   const [data, setdata] = useState();
-  const [userData, setuserData] = useState();
-
-  const getUser = async () => {
-    const userToken = await AsyncStorage.getItem('userToken');
-    let userId1 = await AsyncStorage.getItem('userId');
-    setUserId(userId1);
-
-    if (chatRoom.member[0] == userId1) userFriend = chatRoom.member[1];
-    else userFriend = chatRoom.member[0];
-
-    let auth = {
-      headers: {
-        authorization: 'token ' + userToken,
-      },
-    };
-    try {
-      const response = await apiClient.get(`users/show/${userFriend}`, auth);
-      if (response.data) {
-        return response.data.data;
-      }
-    } catch (e) {
-      console.log('error when getting data ', e.message);
-    }
-  };
 
   const listFriends = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
-    let userId1 = await AsyncStorage.getItem('userId');
+    const userId1 = await AsyncStorage.getItem('userId');
     setUserId(userId1);
-
     try {
       const response = await apiClient.post(
         '/friends/list',
@@ -53,22 +28,44 @@ export default function Fried() {
         return response.data.data.friends;
       }
 
-      // }
     } catch (e) {
       console.log('ga', e.message);
     }
   };
+
   useEffect(() => {
     listFriends().then(setdata);
   }, []);
 
-  const _onChat = item => {
-    // useEffect( item => {
-    //    getUser(item._id).then(setuserData);
-    //   alert(userData);
-    // }, []);
+  const checkChat = async userId => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      const response = await apiClient.get(`/chats/checkChat/${userId}`, {
+        headers: {
+          authorization: 'token ' + userToken,
+        },
+      });
+      if (response.status == 200) {
+        return response.data.data;
+      }
+    } catch (e) {
+      console.log(e.message);
+    }
+  };
+
+  const _onChat = async item => {
+    
+    let chatIdcall = null;
+    chatIdcall = await checkChat(item._id);
+
+    if (chatIdcall) {
+      chatIdcall = chatIdcall._id;
+    }
+  
+    console.log(chatIdcall);
+
     navigation.navigate('ChatRom', {
-      chatId: null,
+      chatId: chatIdcall,
       userData: item,
       userId: userId,
     });
@@ -80,7 +77,7 @@ export default function Fried() {
           data={data}
           keyExtractor={item => `${item._id}`}
           renderItem={({item}) => (
-            <TouchableOpacity onPress={_onChat(item)}>
+            <TouchableOpacity onPress={() => _onChat(item)}>
               <Text style={{marginTop: 10, color: 'red'}}>{item.username}</Text>
             </TouchableOpacity>
           )}

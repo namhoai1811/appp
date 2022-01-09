@@ -3,7 +3,7 @@ import {View, Text, TouchableOpacity} from 'react-native';
 import {useRoute, useNavigation} from '@react-navigation/core';
 import {Avatar} from 'react-native-elements';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../api/Client';
+import apiClient from '../api/client';
 import {Alert} from 'react-native';
 
 

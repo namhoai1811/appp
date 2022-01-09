@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../../api/Client';
+import apiClient from '../../api/client';
 
 const getUser = async () => {
   const userToken = await AsyncStorage.getItem('userToken');

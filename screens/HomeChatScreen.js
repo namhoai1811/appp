@@ -11,7 +11,7 @@ import {useIsFocused} from '@react-navigation/native';
 
 import ChatRoomItem from '../components/ChatRoomItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../api/Client';
+import apiClient from '../api/client';
 
 export default function HomeChatScreen() {
   const isFocused = useIsFocused();

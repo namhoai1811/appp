@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {View, Text, FlatList, TouchableOpacity, Button} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../api/Client';
+import apiClient from '../api/client';
 import {useRoute, useNavigation} from '@react-navigation/core';
 
 export default function Fried() {

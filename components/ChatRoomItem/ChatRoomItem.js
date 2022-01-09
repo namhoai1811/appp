@@ -3,7 +3,7 @@ import {Image, Text, View, Pressable} from 'react-native';
 import {useNavigation} from '@react-navigation/core';
 import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../../api/Client';
+import apiClient from '../../api/client';
 
 export default function ChatRoomItem({chatRoom}) {
   const navigation = useNavigation();

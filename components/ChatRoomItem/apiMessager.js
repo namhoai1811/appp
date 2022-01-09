@@ -1,5 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../../api/Client';
+import apiClient from '../../api/client';
 import {Alert} from 'react-native';
 
 const sendMessage = async (chatId, senderId, receiverId, msg) => {

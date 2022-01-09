@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {View, Image, Text, useWindowDimensions, Pressable} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../../api/Client';
+import apiClient from '../../api/client';
 import {getUser} from './api';
 import {useRoute, useNavigation} from '@react-navigation/core';
 

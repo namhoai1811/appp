@@ -17,6 +17,7 @@ export default function HomeChatScreen() {
   const isFocused = useIsFocused();
 
   const [data, setData] = useState();
+  const [state, setState] = useState({});
 
   const getListChats = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -30,7 +31,12 @@ export default function HomeChatScreen() {
     try {
       const response = await apiClient.get('chats/getListChats', auth);
       if (response.data) {
-        return response.data.data;
+        let data = response.data.data;
+        data = await data.sort(function (a, b) {
+          return new Date(b.updatedAt) - new Date(a.updatedAt);
+        });
+
+        return data;
       }
     } catch (e) {
       console.log('error when getting data ', e.message);
@@ -39,6 +45,9 @@ export default function HomeChatScreen() {
 
   useEffect(() => {
     getListChats().then(setData);
+    return () => {
+      setState({}); // This worked for me
+    };
   }, [isFocused]);
 
   return (

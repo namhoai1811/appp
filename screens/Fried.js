@@ -7,6 +7,7 @@ import {useRoute, useNavigation} from '@react-navigation/core';
 export default function Fried() {
   const [userId, setUserId] = useState();
   const navigation = useNavigation();
+  const [state, setState] = useState({});
 
   const [data, setdata] = useState();
 
@@ -27,7 +28,6 @@ export default function Fried() {
       if (response.status == 200) {
         return response.data.data.friends;
       }
-
     } catch (e) {
       console.log('ga', e.message);
     }
@@ -35,6 +35,9 @@ export default function Fried() {
 
   useEffect(() => {
     listFriends().then(setdata);
+    return () => {
+      setState({}); // This worked for me
+    };
   }, []);
 
   const checkChat = async userId => {
@@ -54,15 +57,14 @@ export default function Fried() {
   };
 
   const _onChat = async item => {
-    
     let chatIdcall = null;
     chatIdcall = await checkChat(item._id);
 
     if (chatIdcall) {
       chatIdcall = chatIdcall._id;
     }
-  
-    console.log(chatIdcall);
+
+    // console.log(chatIdcall);
 
     navigation.navigate('ChatRom', {
       chatId: chatIdcall,

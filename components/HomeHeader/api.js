@@ -12,7 +12,7 @@ const getUser = async () => {
   };
 
   try {
-    // const response =  await apiClient.get(`users/show/60c490859ecf82002257f564`, auth);
+ 
     const response = await apiClient.get(`users/show/${userId}`, auth);
     if (response.data) {
       return response.data.data;

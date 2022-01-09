@@ -9,6 +9,7 @@ export default function ChatRoomItem({chatRoom}) {
   const navigation = useNavigation();
   const [userData, setuserData] = useState();
   const [userId, setUserId] = useState();
+  const [state, setState] = useState({});
   let userFriend = '';
 
   const getUser = async () => {
@@ -36,6 +37,9 @@ export default function ChatRoomItem({chatRoom}) {
 
   useEffect(() => {
     getUser().then(setuserData);
+    return () => {
+      setState({}); // This worked for me
+    };
   }, []);
 
   const _onPress = () => {
@@ -63,9 +67,11 @@ export default function ChatRoomItem({chatRoom}) {
           <View style={styles.rightContainer}>
             <View style={styles.row}>
               <Text style={styles.name}>{userData.username} </Text>
-              <Text style={styles.text}>{chatRoom.createdAt}</Text>
+              <Text style={styles.text}>{chatRoom.updatedAt}</Text>
             </View>
-            {/* <Text numberOfLines={1}  style={styles.text}>{chatRoom.lastMessage.content} </Text> */}
+            <Text numberOfLines={1} style={styles.text}>
+              {chatRoom.content}
+            </Text>
           </View>
         </Pressable>
       )}

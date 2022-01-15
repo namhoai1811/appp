@@ -4,6 +4,7 @@ import {useNavigation} from '@react-navigation/core';
 import styles from './styles';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../../api/client';
+import {TimeUtility} from '../utils/TimeUtility';
 
 export default function ChatRoomItem({chatRoom}) {
   const navigation = useNavigation();
@@ -60,14 +61,21 @@ export default function ChatRoomItem({chatRoom}) {
             }}
             style={styles.image}></Image>
 
-          {/* { chatRoom.newMessages ? <View style= {styles.badgeContainer}>
-                <Text style= {styles.badgeText}>{chatRoom.newMessages} </Text>
-            </View> :null} */}
-
           <View style={styles.rightContainer}>
             <View style={styles.row}>
+              
               <Text style={styles.name}>{userData.username} </Text>
-              <Text style={styles.text}>{chatRoom.updatedAt}</Text>
+
+              <View style={{marginLeft: 'auto', marginRight: 10}}>
+                <Text
+                  style={{
+                    textAlign: 'right',
+                    fontSize: 14,
+                    color: '#333333',
+                  }}>
+                  {TimeUtility.getTimeStr(new Date(chatRoom.updatedAt))}{' '}
+                </Text>
+              </View>
             </View>
             <Text numberOfLines={1} style={styles.text}>
               {chatRoom.content}

@@ -1,5 +1,6 @@
 import {
   View,
+  Text,
   StyleSheet,
   TouchableWithoutFeedback,
   Keyboard,
@@ -12,12 +13,21 @@ import React, {
   useLayoutEffect,
   useRef,
 } from 'react';
+import Clipboard from '@react-native-community/clipboard';
+
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import apiClient from '../api/client';
+
+import {io} from 'socket.io-client';
+const SOCKET_URL = 'http://192.168.1.13:3000';
 
 import {useRoute, useNavigation} from '@react-navigation/core';
 import {useIsFocused} from '@react-navigation/native';
 
 import {Avatar, Icon} from 'react-native-elements';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import AntDesign from 'react-native-vector-icons/AntDesign';
 
 import {
   getMessages,
@@ -32,10 +42,34 @@ export default function ChatMessengerScreen() {
   const route = useRoute();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
-  const [messages, setMessages] = useState([]);
+
   const {chatId, userData, userId} = route.params;
   const receiverId = userData._id;
   const senderId = userId;
+
+  const [state, setState] = useState({});
+
+  const [messages, setMessages] = useState([]);
+  const [listBlocks, setlistBlocks] = useState([]);
+  const [block, setblock] = useState(false);
+
+  const [isSocket, setisSocket] = useState(false);
+
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io.connect(SOCKET_URL);
+    return () => {
+      setState({}); // This worked for me
+    };
+  }, []);
+
+  socket.current?.on('messageBack', data => {
+    setisSocket(!isSocket);
+  });
+  socket.current?.on('blockBack', data => {
+    setisSocket(!isSocket);
+  });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -44,9 +78,7 @@ export default function ChatMessengerScreen() {
           <Icon
             name={'chevron-left'}
             size={40}
-            onPress={() => {
-              navigation.navigate('HomeChat');
-            }}
+            onPress={() => navigation.goBack()}
           />
           <Avatar
             rounded
@@ -56,10 +88,22 @@ export default function ChatMessengerScreen() {
           />
         </View>
       ),
-      title: `          ${userData.username}`,
+      title: `  ${userData.username}`,
       headerRight: () => (
-        <View>
-          <Icon onPress={_setting} name={'menu'} size={40} />
+        <View style={{flexDirection: 'row'}}>
+          <Ionicons
+            style={{marginRight: 8}}
+            name="md-call-outline"
+            size={28}
+            color="black"
+          />
+          <AntDesign
+            style={{marginRight: 8}}
+            name="videocamera"
+            size={28}
+            color="black"
+          />
+          <Icon onPress={_setting} name={'menu'} size={30} />
         </View>
       ),
     });
@@ -83,15 +127,87 @@ export default function ChatMessengerScreen() {
             }))
             .reverse(),
         );
-
-        //   socket.current = io(SOCKET_URL);
       };
       initialize();
-    }, [isFocused]);
+      return () => {
+        setState({}); // This worked for me
+      };
+    }, [isFocused, isSocket]);
   }
-  const _setting = () => {
-    navigation.navigate('MessageSetting', {chatId: chatId, userData: userData});
+
+  useEffect(() => {
+    const initialize = async () => {
+      const listBlocks = await listBlock();
+      setblock(false);
+      for (let i = 0; i < listBlocks.length; i++) {
+        if (listBlocks[i]._id == receiverId) {
+          setblock(true);
+          break;
+        }
+      }
+
+      const listBlockUsers = await listBlockUser();
+
+      for (let i = 0; i < listBlockUsers.length; i++) {
+        if (listBlockUsers[i]._id == senderId) {
+          setblock(true);
+        }
+      }
+    };
+    initialize();
+    return () => {
+      setState({}); // This worked for me
+    };
+  }, [isFocused, isSocket]);
+
+  const listBlock = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      const response = await apiClient.get(
+        '/users/list-block',
+
+        {
+          headers: {
+            authorization: 'token ' + userToken,
+          },
+        },
+      );
+      if (response.status == 200) {
+        // console.log(response.data.data);
+        return response.data.data;
+      }
+    } catch (e) {
+      console.log('ga', e.message);
+    }
   };
+
+  const listBlockUser = async () => {
+    const userToken = await AsyncStorage.getItem('userToken');
+    try {
+      const response = await apiClient.get(
+        `/users/list-block/${receiverId}`,
+
+        {
+          headers: {
+            authorization: 'token ' + userToken,
+          },
+        },
+      );
+      if (response.status == 200) {
+        return response.data.data;
+      }
+    } catch (e) {
+      console.log('ga', e.message);
+    }
+  };
+
+  const _setting = () => {
+    navigation.navigate('MessageSetting', {
+      chatId: chatId,
+      userData: userData,
+    });
+  };
+
   const fetchMessages = async () => {
     try {
       const res = await getMessages(chatId);
@@ -114,6 +230,12 @@ export default function ChatMessengerScreen() {
       } catch (err) {
         console.log(err);
       }
+
+      socket.current?.emit('sendMessages', {
+        user: senderId,
+        data: newMsgObj.text,
+      });
+
       setMessages(previousMessages =>
         GiftedChat.append(previousMessages, messages),
       );
@@ -123,10 +245,14 @@ export default function ChatMessengerScreen() {
   const onDelete = async messageIdToDelete => {
     try {
       const deleteMess = await deleteMessage(messageIdToDelete);
-   
+
       setMessages(
         messages.filter(message => message._id !== messageIdToDelete),
       );
+
+      socket.current?.emit('deleteMessages', {
+        data: messageIdToDelete,
+      });
     } catch (err) {
       console.log(err);
     }
@@ -153,6 +279,24 @@ export default function ChatMessengerScreen() {
     );
   };
 
+  const onShowInput = () => {
+    return true;
+  };
+  const onShowBlock = () => {
+    return (
+      <Text
+        style={{
+          color: 'red',
+          marginLeft: 20,
+          marginRight: 20,
+          textAlign: 'center',
+          fontSize: 18,
+        }}>
+        Bạn hoặc đối phương đang block nhau nên không thể trò chuyện
+      </Text>
+    );
+  };
+
   const scrollToBottomComponent = () => {
     return <FontAwesome5 name="arrow-alt-circle-down" size={22} color="blue" />;
   };
@@ -162,19 +306,36 @@ export default function ChatMessengerScreen() {
       onPress={() => {
         Keyboard.dismiss();
       }}>
-      <View style={{flex: 1, paddingTop: 75}}>
-        <GiftedChat
-          messages={messages}
-          placeholder="Tin nhắn"
-          showAvatarForEveryMessage={true}
-          scrollToBottom
-          scrollToBottomComponent={scrollToBottomComponent}
-          onSend={messages => onSend(messages)}
-          onLongPress={onLongPress}
-          user={{
-            _id: userId,
-          }}
-        />
+      <View style={{flex: 1, paddingTop: 75, backgroundColor: 'white'}}>
+        {block ? (
+          <GiftedChat
+            messages={messages}
+            placeholder="Tin nhắn"
+            renderInputToolbar={onShowInput}
+            renderChatFooter={onShowBlock}
+            showAvatarForEveryMessage={true}
+            scrollToBottom
+            scrollToBottomComponent={scrollToBottomComponent}
+            onSend={messages => onSend(messages)}
+            onLongPress={onLongPress}
+            user={{
+              _id: userId,
+            }}
+          />
+        ) : (
+          <GiftedChat
+            messages={messages}
+            placeholder="Tin nhắn"
+            showAvatarForEveryMessage={true}
+            scrollToBottom
+            scrollToBottomComponent={scrollToBottomComponent}
+            onSend={messages => onSend(messages)}
+            onLongPress={onLongPress}
+            user={{
+              _id: userId,
+            }}
+          />
+        )}
       </View>
     </TouchableWithoutFeedback>
   );

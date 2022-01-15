@@ -1,8 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {View, Image, Text, useWindowDimensions, Pressable} from 'react-native';
 import Feather from 'react-native-vector-icons/Feather';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import apiClient from '../../api/client';
 import {getUser} from './api';
 import {useRoute, useNavigation} from '@react-navigation/core';
 
@@ -14,11 +12,8 @@ const HomeHeader = props => {
     getUser().then(setuserData);
   }, []);
 
-
   const _onPress = () => {
     navigation.navigate('Fried');
-    // listFriends();
-
   };
 
   return (
@@ -26,7 +21,7 @@ const HomeHeader = props => {
       {userData && (
         <View
           style={{
-            // backgroundColor: 'red',
+          
             flexDirection: 'row',
             justifyContent: 'space-between',
             width: '98%',
@@ -46,6 +41,8 @@ const HomeHeader = props => {
               marginLeft: 10,
               textAlign: 'center',
               fontWeight: 'bold',
+              color: '#333333',
+              fontSize: 18,
             }}>
             Chat
           </Text>

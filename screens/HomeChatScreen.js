@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import {
   StyleSheet,
   Image,
@@ -13,11 +13,28 @@ import ChatRoomItem from '../components/ChatRoomItem';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import apiClient from '../api/client';
 
+import {io} from 'socket.io-client';
+const SOCKET_URL = 'http://192.168.1.13:3000';
+
 export default function HomeChatScreen() {
   const isFocused = useIsFocused();
 
   const [data, setData] = useState();
   const [state, setState] = useState({});
+
+  const [isSocket, setisSocket] = useState(false);
+  const socket = useRef();
+
+  useEffect(() => {
+    socket.current = io.connect(SOCKET_URL);
+    return () => {
+      setState({});
+    };
+  }, []);
+
+  socket.current?.on('messageBack', data => {
+    setisSocket(!isSocket);
+  });
 
   const getListChats = async () => {
     const userToken = await AsyncStorage.getItem('userToken');
@@ -48,7 +65,7 @@ export default function HomeChatScreen() {
     return () => {
       setState({}); // This worked for me
     };
-  }, [isFocused]);
+  }, [isFocused, isSocket]);
 
   return (
     <>
@@ -59,6 +76,13 @@ export default function HomeChatScreen() {
             keyExtractor={item => `${item._id}`}
             renderItem={({item}) => <ChatRoomItem chatRoom={item} />}
             showsVerticalScrollIndicator={false}
+            ListEmptyComponent={
+              <View style={{marginTop: 10}}>
+                <Text style={styles.describeText}>
+                  Chưa có cuộc trò chuyện nào!
+                </Text>
+              </View>
+            }
           />
         </SafeAreaView>
       )}
@@ -68,7 +92,16 @@ export default function HomeChatScreen() {
 
 const styles = StyleSheet.create({
   page: {
-    backgroundColor: 'white',
+    backgroundColor: '#e6e6e6',
     flex: 1,
+  },
+  describeText: {
+    fontSize: 20,
+    paddingLeft: 16,
+    paddingRight: 16,
+    color: '#333333',
+    marginTop: 12,
+    marginBottom: 4,
+    textAlign: 'center',
   },
 });
